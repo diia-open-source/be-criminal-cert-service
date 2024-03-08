@@ -1,0 +1,403 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+import "analytics.proto";
+import "contextMenu.proto";
+import "publicServiceCode.proto";
+import "publicServices.proto";
+import "ui.proto";
+
+package ua.gov.diia.criminal_cert;
+option java_multiple_files = true;
+option java_package = "ua.gov.diia.criminal_cert";
+
+service CriminalCertService {
+    rpc checkCriminalRecordCertificateForPublicService(CheckCriminalRecordCertificateForPublicServiceRequest) returns (CheckCriminalRecordCertificateForPublicServiceResponse);
+    rpc downloadCriminalRecordCertificateArchiveZip(DownloadCriminalRecordCertificateArchiveZipRequest) returns (DownloadCriminalRecordCertificateArchiveZipResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/public-service/criminal-cert/{id}/download"
+        };
+    };
+    rpc downloadCriminalRecordCertificatePdf(DownloadCriminalRecordCertificatePdfRequest) returns (DownloadCriminalRecordCertificatePdfResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/public-service/criminal-cert/{id}/pdf"
+        };
+    };
+    rpc downloadCriminalRecordCertificatePdfToProcess(DownloadCriminalRecordCertificatePdfToProcessRequest) returns (DownloadCriminalRecordCertificatePdfToProcessResponse);
+    rpc getCriminalRecordCertificateApplicationContacts(google.protobuf.Empty) returns (ua.gov.diia.types.ContactsResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/public-service/criminal-cert/contacts"
+        };
+    };
+    rpc getCriminalRecordCertificateApplicationBirthPlace(google.protobuf.Empty) returns (CriminalRecordCertificateApplicationBirthPlace) {
+        option (google.api.http) = {
+            get: "/api/v1/public-service/criminal-cert/birth-place"
+        };
+    };
+    rpc getCriminalRecordCertificateApplicationInfo(GetCriminalRecordCertificateApplicationInfoRequest) returns (GetCriminalRecordCertificateApplicationInfoResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/public-service/criminal-cert/application/info"
+        };
+    };
+    rpc getCriminalRecordCertificateApplicationNationalities(google.protobuf.Empty) returns (CriminalRecordCertificateApplicationNationalities) {
+        option (google.api.http) = {
+            get: "/api/v1/public-service/criminal-cert/nationalities"
+        };
+    };
+    rpc getCriminalRecordCertificateApplicationReasons(google.protobuf.Empty) returns (CriminalRecordCertificateApplicationReasons) {
+        option (google.api.http) = {
+            get: "/api/v1/public-service/criminal-cert/reasons"
+        };
+    };
+    rpc getCriminalRecordCertificateApplicationRequester(google.protobuf.Empty) returns (CriminalRecordCertificateApplicationRequester) {
+        option (google.api.http) = {
+            get: "/api/v1/public-service/criminal-cert/requester"
+        };
+    };
+    rpc getCriminalRecordCertificateApplicationTypes(google.protobuf.Empty) returns (CriminalRecordCertificateApplicationTypes) {
+        option (google.api.http) = {
+            get: "/api/v1/public-service/criminal-cert/types"
+        };
+    };
+    rpc getCriminalRecordCertificateById(GetCriminalRecordCertificateByIdRequest) returns (GetCriminalRecordCertificateByIdResponse) {
+        option (google.api.http) = {
+            get: "/api/v1/public-service/criminal-cert/{id}"
+        };
+    };
+    rpc getCriminalRecordCertificatesByStatus(GetCriminalRecordCertificatesByStatusRequest) returns (CriminalRecordCertificateList) {
+        option (google.api.http) = {
+            get: "/api/v1/public-service/criminal-cert/applications/{status}"
+        };
+    };
+    rpc sendCriminalRecordCertificateApplication(SendCriminalRecordCertificateApplicationRequest) returns (SendCriminalRecordCertificateApplicationResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/public-service/criminal-cert/application"
+        };
+    };
+    rpc sendCriminalRecordCertificateApplicationConfirmation(SendCriminalRecordCertificateApplicationRequest) returns (SendCriminalRecordCertificateApplicationConfirmationResponse) {
+        option (google.api.http) = {
+            post: "/api/v1/public-service/criminal-cert/confirmation"
+        };
+    };
+}
+
+message CheckCriminalRecordCertificateForPublicServiceRequest {
+    string userIdentifier = 1;
+    CriminalRecordCertificatePublicService publicService = 2; // required
+}
+
+message CriminalRecordCertificatePublicService {
+    ua.gov.diia.types.PublicServiceCode code = 1;
+    optional string resourceId = 2;
+}
+
+message CheckCriminalRecordCertificateForPublicServiceResponse {
+    bool hasOrderedCertificate = 1;
+    optional string applicationId = 2;
+    optional string status = 3;
+}
+
+message DownloadCriminalRecordCertificateArchiveZipRequest {
+    string id = 1;
+}
+
+message DownloadCriminalRecordCertificateArchiveZipResponse {
+    string file = 1;
+}
+
+message DownloadCriminalRecordCertificatePdfRequest {
+    string id = 1;
+}
+
+message DownloadCriminalRecordCertificatePdfResponse {
+    string file = 1;
+}
+
+message DownloadCriminalRecordCertificatePdfToProcessRequest {
+    string id = 1;
+}
+
+message DownloadCriminalRecordCertificatePdfToProcessResponse {
+    string file = 1;
+}
+
+message GetCriminalRecordCertificateByIdRequest {
+    string id = 1;
+}
+
+message GetCriminalRecordCertificateByIdResponse {
+    optional ua.gov.diia.types.contextmenu.NavigationPanel navigationPanel = 1;
+    repeated ua.gov.diia.types.contextmenu.PublicServiceContextMenu contextMenu = 2;
+    optional ua.gov.diia.types.analytics.RatingForm ratingForm = 3;
+    // CriminalRecordCertificateApplicationDetails
+    string title = 4;
+    optional ua.gov.diia.types.AttentionMessage statusMessage = 5;
+    CriminalRecordCertificateStatus status = 6;
+    repeated CriminalRecordCertificateApplicationLoadAction loadActions = 7;
+}
+
+message CriminalRecordCertificateApplicationDetails {
+    string title = 1;
+    optional ua.gov.diia.types.AttentionMessage statusMessage = 2;
+    CriminalRecordCertificateStatus status = 3;
+    repeated CriminalRecordCertificateApplicationLoadAction loadActions = 4;
+}
+
+message CriminalRecordCertificateApplicationLoadAction {
+    CriminalRecordCertificateApplicationLoadActionType type = 1;
+    string icon = 2;
+    string name = 3;
+}
+
+enum CriminalRecordCertificateApplicationLoadActionType {
+    downloadArchive = 0;
+    viewPdf = 1;
+}
+
+message CriminalRecordCertificateApplicationNationalities {
+    CriminalRecordCertificateApplicationNationalitiesScreen nationalitiesScreen = 1;
+}
+
+message CriminalRecordCertificateApplicationNationalitiesScreen {
+    string title = 1;
+    ua.gov.diia.types.AttentionMessage attentionMessage = 2;
+    CriminalRecordCertificateApplicationNationalitiesCountry country = 3;
+    int32 maxNationalitiesCount = 4;
+    CriminalRecordCertificateApplicationScreen nextScreen = 5;
+}
+
+message CriminalRecordCertificateApplicationNationalitiesCountry {
+    string label = 1;
+    string hint = 2;
+    CriminalRecordCertificateApplicationNationalitiesAddAction addAction = 3;
+}
+
+message CriminalRecordCertificateApplicationNationalitiesAddAction {
+    string icon = 1;
+    string name = 2;
+}
+
+enum CriminalRecordCertificateApplicationScreen {
+    reasons = 0;
+    requester = 1;
+    birthPlace = 2;
+    nationalities = 3;
+    registrationPlace = 4;
+    contacts = 5;
+}
+
+message CriminalRecordCertificateApplicationBirthPlace {
+    CriminalRecordCertificateApplicationBirthPlaceDataScreen birthPlaceDataScreen = 1;
+}
+
+message CriminalRecordCertificateApplicationBirthPlaceDataScreen {
+    string title = 1;
+    CriminalRecordCertificateApplicationBirthPlaceCountry country = 2;
+    CriminalRecordCertificateApplicationBirthPlaceCity city = 3;
+    CriminalRecordCertificateApplicationScreen nextScreen = 4;
+}
+
+message CriminalRecordCertificateApplicationBirthPlaceCountry {
+    string label = 1;
+    string hint = 2;
+    optional string checkbox = 3;
+    ua.gov.diia.types.HintedLabel otherCountry = 4;
+    optional string value = 5;
+}
+
+message CriminalRecordCertificateApplicationBirthPlaceCity {
+    string label = 1;
+    string hint = 2;
+    string description = 3;
+}
+
+message CriminalRecordCertificateApplicationReasons {
+    string title = 1;
+    string subtitle = 2;
+    repeated CriminalRecordCertificateApplicationReason reasons = 3;
+}
+
+message CriminalRecordCertificateApplicationReason {
+    string code = 1;
+    string name = 2;
+}
+
+message CriminalRecordCertificateApplicationRequester {
+    CriminalRecordCertificateApplicationRequesterDataScreen requesterDataScreen = 1; // required
+}
+
+message CriminalRecordCertificateApplicationRequesterDataScreen {
+    string title = 1;
+    ua.gov.diia.types.AttentionMessage attentionMessage = 2;
+    ua.gov.diia.types.LabeledValue fullName = 3;
+    CriminalRecordCertificateApplicationScreen nextScreen = 4;
+}
+
+message CriminalRecordCertificateApplicationTypes {
+    string title = 1;
+    string subtitle = 2;
+    repeated CriminalRecordCertificateApplicationType types = 3;
+}
+
+message CriminalRecordCertificateApplicationType {
+    CriminalRecordCertificateType code = 1;
+    string name = 2;
+    string description = 3;
+}
+
+enum CriminalRecordCertificateType {
+    full = 0;
+    short = 1;
+}
+
+message CriminalRecordCertificate {
+    string applicationId = 1;
+    string userIdentifier = 2;
+    string mobileUid = 3;
+    CriminalRecordCertificateStatus status = 4; // required
+    optional CriminalRecordCertificateCancelReason cancelReason = 5;
+    CriminalRecordCertificateReason reason = 6; // required
+    optional CriminalRecordCertificateType type = 7;
+    map<string, google.protobuf.Timestamp> notifications = 8;
+    repeated CriminalRecordCertificateStatusHistoryItem statusHistory = 9; // required
+    bool isDownloadAction = 10;
+    bool isViewAction = 11;
+    optional google.protobuf.Timestamp sendingRequestTime = 12;
+    optional google.protobuf.Timestamp receivingApplicationTime = 13;
+    CriminalRecordCertificateApplicant applicant = 14; // required
+    optional CriminalRecordCertificatePublicService publicService = 15;
+}
+
+enum CriminalRecordCertificateStatus {
+    applicationProcessing = 0;
+    cancel = 1;
+    done = 2;
+}
+
+enum CriminalRecordCertificateCancelReason {
+    expired = 0;
+}
+
+message CriminalRecordCertificateReason {
+    string code = 1;
+    string name = 2;
+}
+
+message CriminalRecordCertificateStatusHistoryItem {
+    CriminalRecordCertificateStatus status = 1;
+    google.protobuf.Timestamp date = 2;
+}
+
+message CriminalRecordCertificateApplicant {
+    string applicantIdentifier = 1;
+    string applicantMobileUid = 2;
+    repeated string nationality = 3;
+}
+
+message GetCriminalRecordCertificatesByStatusRequest {
+    CriminalRecordCertificateStatus status = 1;
+    optional int32 skip = 2;
+    optional int32 limit = 3;
+}
+
+message CriminalRecordCertificateList {
+    optional ua.gov.diia.types.contextmenu.NavigationPanel navigationPanel = 1;
+    optional CriminalRecordCertificateStatusFilterInfo certificatesStatus = 2;
+    optional ua.gov.diia.types.AttentionMessage stubMessage = 3;
+    repeated CriminalRecordCertificateItem certificates = 4;
+    int32 total = 5;
+}
+
+message CriminalRecordCertificateStatusFilterInfo {
+    CriminalRecordCertificateStatus code = 1;
+    string name = 2;
+}
+
+message CriminalRecordCertificateItem {
+    string applicationId = 1;
+    CriminalRecordCertificateStatus status = 2;
+    string reason = 3;
+    string creationDate = 4;
+    string type = 5;
+}
+
+message SendCriminalRecordCertificateApplicationRequest {
+    message BirthPlace {
+        string country = 1;
+        string city = 2;
+    }
+    optional string reasonId = 1;
+    optional CriminalRecordCertificateType certificateType = 2;
+    optional string previousFirstName = 3;
+    optional string previousMiddleName = 4;
+    optional string previousLastName = 5;
+    optional BirthPlace birthPlace = 6;
+    repeated string nationalities = 7;
+    optional string registrationAddressId = 8;
+    string phoneNumber = 9;
+    optional string  email = 10;
+    optional CriminalRecordCertificatePublicService publicService = 11;
+}
+
+message SendCriminalRecordCertificateApplicationResponse {
+    optional string applicationId = 1;
+    int32 processCode = 2;
+}
+
+message SendCriminalRecordCertificateApplicationConfirmationResponse {
+    CriminalRecordCertificateApplicationConfirmationApplication application = 1;
+}
+
+message CriminalRecordCertificateApplicationConfirmationApplication {
+    string title = 1;
+    optional ua.gov.diia.types.AttentionMessage attentionMessage = 2;
+    CriminalRecordCertificateApplicationConfirmationApplicant applicant = 3;
+    CriminalRecordCertificateApplicationConfirmationContacts contacts = 4;
+    CriminalRecordCertificateApplicationConfirmationCertificateType certificateType = 5;
+    CriminalRecordCertificateApplicationConfirmationReason reason = 6;
+    string checkboxName = 7;
+}
+
+message CriminalRecordCertificateApplicationConfirmationApplicant {
+    string title = 1;
+    ua.gov.diia.types.LabeledValue fullName = 2;
+    optional ua.gov.diia.types.LabeledValue previousFirstName = 3;
+    optional ua.gov.diia.types.LabeledValue previousLastName = 4;
+    optional ua.gov.diia.types.LabeledValue previousMiddleName = 5;
+    ua.gov.diia.types.LabeledValue gender = 6;
+    ua.gov.diia.types.LabeledValue nationality = 7;
+    ua.gov.diia.types.LabeledValue birthDate = 8;
+    ua.gov.diia.types.LabeledValue birthPlace = 9;
+    ua.gov.diia.types.LabeledValue registrationAddress = 10;
+}
+
+message CriminalRecordCertificateApplicationConfirmationContacts {
+    string title = 1;
+    ua.gov.diia.types.LabeledValue phoneNumber = 2;
+    optional ua.gov.diia.types.LabeledValue email = 3;
+}
+
+message CriminalRecordCertificateApplicationConfirmationCertificateType {
+    string title = 1;
+    string type = 2;
+}
+
+message CriminalRecordCertificateApplicationConfirmationReason {
+    string title = 1;
+    string reason = 2;
+}
+
+message GetCriminalRecordCertificateApplicationInfoRequest {
+    optional ua.gov.diia.types.PublicServiceCode publicService = 1;
+}
+
+message GetCriminalRecordCertificateApplicationInfoResponse {
+    optional bool showContextMenu = 1;
+    optional string title = 2;
+    optional string text = 3;
+    optional ua.gov.diia.types.AttentionMessage attentionMessage = 4;
+    optional CriminalRecordCertificateApplicationScreen nextScreen = 5;
+}

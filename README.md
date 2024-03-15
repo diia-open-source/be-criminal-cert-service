@@ -26,7 +26,7 @@ This repository contains the service which provides acquiring of criminal certif
 Example:
 
 ```
-git clone https://github.com/diia-open-source/criminal-cert-service.git
+git clone https://github.com/diia-open-source/be-criminal-cert-service.git criminal-cert-service
 ```
 
 ---
